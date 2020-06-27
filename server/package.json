@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/hoek": "^9.0.4",
+    "@hapi/inert": "^6.0.1",
+    "@hapi/joi": "^17.1.1",
+    "date-fns": "^2.14.0",
+    "decimal.js": "^10.2.0",
+    "limiter": "^1.1.5",
+    "mongoose": "^5.9.18",
+    "node-cron": "^2.0.3"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-nodemon": "^2.5.0"
+  }
+}

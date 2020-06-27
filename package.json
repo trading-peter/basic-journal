@@ -1,0 +1,26 @@
+{
+  "name": "basic-journal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/trading-peter/basic-journal.git",
+  "author": "trading_peter",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "docker-compose -f docker-compose-develop.yml up -d && docker-compose -f docker-compose-develop.yml logs -f nodejs",
+    "stop": "docker-compose -f docker-compose-develop.yml down",
+    "watch-client": "gulp dev-client",
+    "build-frontend": "gulp build"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-nodemon": "^2.5.0",
+    "livereload": "^0.9.1",
+    "rollup": "^2.11.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-conditional": "^3.1.2",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-minify-es": "^1.1.1",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}

@@ -1,0 +1,9 @@
+FROM node:12.18.0-stretch
+
+RUN apt-get update && apt-get install -y lsof
+RUN npm i -g gulp typescript@next eslint --unsafe-perm
+
+USER node
+WORKDIR /home/node/app/server
+
+CMD [ "gulp", "serve" ]

@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nodejs:
+    container_name: basic-journal-nodejs
+    build:
+      context: .
+      dockerfile: Dockerfile-develop
+    env_file:
+      - ./development.env
+    environment:
+      - CONFIG=development
+    ports:
+      - "3000:3000"
+      - "9230:9230"
+    volumes:
+      - ./server:/home/node/app/server
+      - ./client:/home/node/app/client
+  mongodb:
+    container_name: basic-journal-mongodb
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
