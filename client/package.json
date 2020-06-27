@@ -8,6 +8,7 @@
     "date-fns": "^2.14.0",
     "decimal.js": "^10.2.0",
     "lightweight-charts": "^3.0.1",
-    "lit-element": "^2.3.1"
+    "lit-element": "^2.3.1",
+    "pretty-ms": "^7.0.0"
   }
 }

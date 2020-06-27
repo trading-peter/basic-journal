@@ -5,6 +5,7 @@ Copyright (c) 2020 trading_peter
 
 import './bj-chart.js';
 import './bj-trade-table.js';
+import './bj-balance-table.js';
 import { LitElement, html } from 'lit-element';
 import { fetchMixin } from './fetch-mixin.js';
 import { parseISO, format } from 'date-fns';
@@ -13,6 +14,7 @@ class BjApp extends fetchMixin(LitElement) {
   render() {
     const accounts = this.accounts || [];
     const trades = this.trades || [];
+    const balance = this.balance || [];
 
     return html`
       <style>
@@ -33,23 +35,28 @@ class BjApp extends fetchMixin(LitElement) {
         .tools {
           padding: 20px;
         }
-
-        .trade-table {
-          display: grid;
-          grid-template-columns: 1fr auto auto;
-          grid-column-gap: 20px;
-          grid-row-gap: 10px;
-          padding: 10px;
-          max-width: 500px;
-          margin: 10px;
+        
+        .tabs {
+          display: flex;
+          margin-top: 30px;
+          border-bottom: solid 1px #fff;
         }
 
-        .header {
-          font-weight: bold;
+        .tabs > div {
+          line-height: 42px;
+          font-size: 16px;
+          padding: 0 20px;
+          border-left: solid 1px #fff;
+          border-top: solid 1px #fff;
+          cursor: pointer;
         }
 
-        .center {
-          text-align: center;
+        .tabs > div:last-child {
+          border-right: solid 1px #fff;
+        }
+
+        [hidden] {
+          display: none;
         }
       </style>
 
@@ -65,7 +72,13 @@ class BjApp extends fetchMixin(LitElement) {
         <bj-chart .account=${this._selAccount}></bj-chart>
       </div>
 
-      <bj-trade-table .entries=${trades}></bj-trade-table>
+      <div class="tabs">
+        <div @click=${() => this._selSection = 'trades'}>Trades</div>
+        <div @click=${() => this._selSection = 'balance'}>Wallet History</div>
+      </div>
+
+      <bj-trade-table ?hidden=${this._selSection !== 'trades'} .entries=${trades}></bj-trade-table>
+      <bj-balance-table ?hidden=${this._selSection !== 'balance'} .entries=${balance}></bj-balance-table>
     `;
   }
 
@@ -73,7 +86,9 @@ class BjApp extends fetchMixin(LitElement) {
     return {
       accounts: { type: Object },
       trades: { type: Array },
+      balance: { type: Array },
       _selAccount: { type: String },
+      _selSection: { type: String },
     };
   }
 
@@ -82,6 +97,7 @@ class BjApp extends fetchMixin(LitElement) {
 
     this.trades = [];
     this.balance = [];
+    this._selSection = 'trades';
   }
 
   createRenderRoot() {
@@ -104,6 +120,8 @@ class BjApp extends fetchMixin(LitElement) {
   async _loadStats() {
     const { trades, balance } = await this.post('/stats', { account: this._selAccount });
     this.trades = trades;
+    this.balance = balance;
+    
     this.querySelector('bj-chart').setRecords(balance.map(rec => {
       return {
         time: format(parseISO(rec.date), 'yyyy-MM-dd'),

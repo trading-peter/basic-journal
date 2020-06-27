@@ -3,7 +3,7 @@ import D from 'decimal.js';
 import { format, parseISO, differenceInMilliseconds } from 'date-fns';
 import prettyMS from 'pretty-ms';
 
-class BjTradeTable extends LitElement {
+class BjBalanceTable extends LitElement {
   
   static get styles() {
     return css`
@@ -41,17 +41,8 @@ class BjTradeTable extends LitElement {
     return html`
       <table border="1">
         <thead>
-          <th>Execution Date</th>
-          <th>Direction</th>
-          <th>Amount</th>
-          <th>Commission</th>
-          <th>Raw PnL</th>
-          <th>PnL</th>
-          <th>Funding</th>
-          <th>Avg. Entry Price</th>
-          <th>Avg. Exit Price</th>
-          <th>Slippage open/close</th>
-          <th>Exec. Delay (secs)</th>
+          <th width="250">Date</th>
+          <th>Balance</th>
         </thead>
         <tbody>
           ${entries.map((item, idx) => this._renderItem(item, idx))}
@@ -64,16 +55,7 @@ class BjTradeTable extends LitElement {
     return html`
       <tr>
         <td>${this._formatDate(item.date)}</td>
-        <td>${item.side}</td>
-        <td title=${item.amount}>${item.amount}</td>
-        <td title=${item.fee}>${item.fee}</td>
-        <td title=${item.rawPnl}>${item.rawPnl}</td>
-        <td title=${item.pnl}>${item.pnl}</td>
-        <td title=${D(item.funding || 0).mul(-1)}>${D(item.funding || 0).mul(-1)}</td>
-        <td>${item.avgPrice}</td>
-        <td>${item.avgPriceClose}</td>
-        <td>${item.openSlippage} / ${item.closeSlippage}</td>
-        <td>${this._executionDelay(item)}</td>
+        <td>${item.balance}</td>
       </tr>
     `;
   }
@@ -93,4 +75,4 @@ class BjTradeTable extends LitElement {
   }
 }
 
-window.customElements.define('bj-trade-table', BjTradeTable);
+window.customElements.define('bj-balance-table', BjBalanceTable);

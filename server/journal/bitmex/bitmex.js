@@ -12,7 +12,7 @@ class BitMEX {
     this._account = account;
     this._tradesModel = tradesModel;
     this._balanceModel = balanceModel;
-    this._limiter = new RateLimiter(60, 'minute');
+    this._limiter = new RateLimiter(55, 'minute');
     this._acc = account;
     this._api = new Api({
       key: account.apiKey,
@@ -116,6 +116,7 @@ class BitMEX {
       }
 
       if (data.length < 100) {
+        this._server.log([ 'bitmex', 'info' ], `All trades fetched`);
         return;
       }
     }
@@ -142,6 +143,7 @@ class BitMEX {
       start += 100;
   
       if (data.length < 100) {
+        this._server.log([ 'bitmex', 'info' ], `All balance records fetched`);
         return;
       }
     }
