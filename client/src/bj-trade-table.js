@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element/lit-element.js';
 import D from 'decimal.js';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, differenceInMilliseconds } from 'date-fns';
 
 class BjTradeTable extends LitElement {
   
@@ -42,7 +42,7 @@ class BjTradeTable extends LitElement {
         <thead>
           <th>Execution Date</th>
           <th>Direction</th>
-          <th>Balance</th>
+          <th>Amount</th>
           <th>Commission</th>
           <th>Raw PnL</th>
           <th>PnL</th>
@@ -50,6 +50,7 @@ class BjTradeTable extends LitElement {
           <th>Avg. Entry Price</th>
           <th>Avg. Exit Price</th>
           <th>Slippage open/close</th>
+          <th>Exec. Delay (secs)</th>
         </thead>
         <tbody>
           ${entries.map((item, idx) => this._renderItem(item, idx))}
@@ -63,8 +64,7 @@ class BjTradeTable extends LitElement {
       <tr>
         <td>${this._formatDate(item.date)}</td>
         <td>${item.side}</td>
-        <td>${item.amount}</td>
-        <td>${item.avgPrice}</td>
+        <td title=${item.amount}>${item.amount}</td>
         <td title=${item.fee}>${item.fee}</td>
         <td title=${item.rawPnl}>${item.rawPnl}</td>
         <td title=${item.pnl}>${item.pnl}</td>
@@ -72,6 +72,7 @@ class BjTradeTable extends LitElement {
         <td>${item.avgPrice}</td>
         <td>${item.avgPriceClose}</td>
         <td>${item.openSlippage} / ${item.closeSlippage}</td>
+        <td>${this._executionDelay(item)}</td>
       </tr>
     `;
   }
@@ -84,6 +85,10 @@ class BjTradeTable extends LitElement {
 
   _formatDate(dateStr) {
     return format(parseISO(dateStr), 'yyyy-MM-dd HH:mm:ss');
+  }
+
+  _executionDelay(item) {
+    return differenceInMilliseconds(parseISO(item.date), parseISO(item.candleCloseDate)) / 1000
   }
 }
 
