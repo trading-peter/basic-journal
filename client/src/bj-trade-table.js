@@ -68,7 +68,7 @@ class BjTradeTable extends LitElement {
         <td title=${item.fee}>${item.fee}</td>
         <td title=${item.rawPnl}>${item.rawPnl}</td>
         <td title=${item.pnl}>${item.pnl}</td>
-        <td title=${D(item.funding || 0).mul(-1)}>${D(item.funding).mul(-1)}</td>
+        <td title=${D(item.funding || 0).mul(-1)}>${D(item.funding || 0).mul(-1)}</td>
         <td>${item.avgPrice}</td>
         <td>${item.avgPriceClose}</td>
         <td>${item.openSlippage} / ${item.closeSlippage}</td>
