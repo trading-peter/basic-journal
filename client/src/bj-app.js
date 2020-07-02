@@ -40,6 +40,7 @@ class BjApp extends fetchMixin(LitElement) {
           display: flex;
           margin-top: 30px;
           border-bottom: solid 1px #fff;
+          padding-left: 20px;
         }
 
         .tabs > div {
@@ -118,8 +119,19 @@ class BjApp extends fetchMixin(LitElement) {
   }
 
   async _loadStats() {
-    const { trades, balance } = await this.post('/stats', { account: this._selAccount });
+    let { trades, balance } = await this.post('/stats', { account: this._selAccount });
     this.trades = trades;
+
+    if (balance.length === 0 && trades[0] && trades[0].balance) {
+      balance = this.trades.map(trade => {
+        return {
+          recId: trade.orderId,
+          balance: trade.balance,
+          date: trade.date
+        };
+      });
+    }
+
     this.balance = balance;
     
     this.querySelector('bj-chart').setRecords(balance.map(rec => {

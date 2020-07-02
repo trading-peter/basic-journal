@@ -30,6 +30,7 @@ class TradesModel {
       rawPnl:                  { type: Decimal },
       pnl:                  { type: Decimal },
       funding:              { type: Decimal },
+      balance:              { type: Decimal },
       openSlippage:         { type: Decimal },
       closeSlippage:        { type: Decimal },
       candleClosePrice:     { type: Decimal },

@@ -32,6 +32,10 @@ class BjTradeTable extends LitElement {
         text-overflow: ellipsis;
         max-width: 100px;
       }
+
+      tr:nth-child(even) {
+        background: #1b1f30;
+      }
     `;
   }
   

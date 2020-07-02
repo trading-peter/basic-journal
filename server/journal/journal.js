@@ -36,7 +36,9 @@ const Journal = new class {
     ]);
 
     // Cron.schedule('15 * * * *', () => this._fetchAccounts);
-    this._fetchAccounts();
+    setTimeout(() => {
+      this._fetchAccounts();
+    }, 2000);
   }
 
   async _fetchAccounts() {
@@ -49,7 +51,10 @@ const Journal = new class {
 
       const handler = new (require(`./${exchange}/${exchange}`))(acc, this._server, this.tradesModel, this.balanceModel);
       await handler.fetchTradesSince(lastTrade);
-      await handler.fetchBalanceHistorySince(balanceCount);
+
+      if (handler.fetchBalanceHistorySince) {
+        await handler.fetchBalanceHistorySince(balanceCount);
+      }
     }
   }
 }

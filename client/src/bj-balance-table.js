@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element/lit-element.js';
-import D from 'decimal.js';
 import { format, parseISO, differenceInMilliseconds } from 'date-fns';
 import prettyMS from 'pretty-ms';
 
@@ -31,6 +30,10 @@ class BjBalanceTable extends LitElement {
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100px;
+      }
+
+      tr:nth-child(even) {
+        background: #1b1f30;
       }
     `;
   }
