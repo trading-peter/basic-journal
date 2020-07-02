@@ -32,6 +32,6 @@ module.exports = {
     ]
   },
   appConfig: {
-    accounts: [ 'XBTUSD_LRAIC' ]
+    accounts: [ 'XBTUSD_LRAIC', 'ETH_PERP_LRAIC' ]
   }
 };
