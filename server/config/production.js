@@ -27,7 +27,8 @@ module.exports = {
         apiKey: process.env.ETHPERP_LRAIC_KEY,
         apiSecret: process.env.ETHPERP_LRAIC_SECRET,
         subAccount: process.env.ETHPERP_LRAIC_SUBACCOUNT,
-        balance: 100
+        balance: 100,
+        cache: true
       }
     ]
   },
