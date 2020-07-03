@@ -10,6 +10,7 @@ const Journal = new class {
 
     this.tradesModel = Mongoose.model('trade');
     this.balanceModel = Mongoose.model('balance');
+    this.cacheModel = Mongoose.model('cache');
 
     server.route([
       {
@@ -49,7 +50,7 @@ const Journal = new class {
       const lastTrade = await this.tradesModel.findOne({ account: acc.name }).sort({ date: -1 }) || new this.tradesModel({ date: acc.startTime });
       const balanceCount = await this.balanceModel.find({ account: acc.name }).countDocuments();
 
-      const handler = new (require(`./${exchange}/${exchange}`))(acc, this._server, this.tradesModel, this.balanceModel);
+      const handler = new (require(`./${exchange}/${exchange}`))(acc, this._server, this.tradesModel, this.balanceModel, this.cacheModel);
       await handler.fetchTradesSince(lastTrade);
 
       if (handler.fetchBalanceHistorySince) {

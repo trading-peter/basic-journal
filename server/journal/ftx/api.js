@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const https = require('https');
 const querystring = require('querystring');
+const RateLimiter = require('limiter').RateLimiter;
+const { asyncRemoveTokens } = require('../../libs/misc');
 
 const version = '1.0.0';
 const name = 'ftx-rest-api';
@@ -11,6 +13,7 @@ class FTXRest {
   constructor(config) {
     this.ua = USER_AGENT;
     this.timeout = 90 * 1000;
+    this.limiter = new RateLimiter(29, 'second');
 
     this.agent = new https.Agent({
       keepAlive: true,
@@ -37,6 +40,10 @@ class FTXRest {
 
     if(config.userAgent) {
       this.ua += ' | ' + config.userAgent;
+    }
+
+    if (config.cacheModel) {
+      this.cacheModel = config.cacheModel;
     }
   }
 
@@ -100,7 +107,17 @@ class FTXRest {
   }
 
   // a draft is an option object created (potentially previously) with createDraft
-  requestDraft(draft) {
+  async requestDraft(draft) {
+    if (this.cacheModel) {
+      const cacheItem = await this.cacheModel.findOne({ request: draft.path });
+
+      if (cacheItem) {
+        return cacheItem.result;
+      }
+    }
+
+    await asyncRemoveTokens(1, this.limiter);
+
     return new Promise((resolve, reject) => {
       const req = https.request(draft, res => {
         res.setEncoding('utf8');
@@ -112,7 +129,7 @@ class FTXRest {
           // about status code.
           buffer += data;
         });
-        res.on('end', function() {
+        res.on('end', async () => {
           if (res.statusCode >= 300) {
             let message;
             let data;
@@ -133,6 +150,10 @@ class FTXRest {
           } catch (err) {
             console.error('JSON ERROR!', buffer);
             return reject(new Error('Json error'));
+          }
+
+          if (this.cacheModel) {
+            await this.cacheModel.insertMany([{ request: draft.path, result: data }]);
           }
 
           resolve(data);
@@ -158,7 +179,7 @@ class FTXRest {
   }
 
   // props: {path, method, data, timeout}
-  request(props) {
+  async request(props) {
     return this.requestDraft(this.createDraft(props));
   }
 };

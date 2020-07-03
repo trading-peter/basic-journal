@@ -2,6 +2,7 @@ const Mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const TradesModel = require('./tradesModel');
 const BalanceModel = require('./balanceModel');
+const CacheModel = require('./cacheModel');
 
 const DB = new class {
   async register(server, options) {
@@ -11,6 +12,9 @@ const DB = new class {
         autoIndex: Joi.boolean()
       }),
       balanceModel: Joi.object({
+        autoIndex: Joi.boolean()
+      }),
+      cacheModel: Joi.object({
         autoIndex: Joi.boolean()
       })
     }));
@@ -26,6 +30,7 @@ const DB = new class {
     await Mongoose.connect(options.dbUrl, conOptions);
     TradesModel.init(server, options.tradesModel);
     BalanceModel.init(server, options.balanceModel);
+    CacheModel.init(server, options.cacheModel);
   }
 }
 
