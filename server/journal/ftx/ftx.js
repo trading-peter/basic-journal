@@ -19,9 +19,6 @@ class FTX {
       secret: account.apiSecret,
       subaccount: account.subAccount
     });
-
-    // Current trade the script is constructing from order history.
-    this._currTrade = null;
   }
 
   async fetchTradesSince(lastTrade) {
@@ -103,10 +100,9 @@ class FTX {
             this._server.log([ 'warning' ], `Trade ${trade.orderId} already saved. Skipping.`);
           }
 
-          const diff = D(trade.amount).sub(tradeClosedValue);
+          const diff = D(trade.amount).sub(tradeClosedValue).abs();
           
           if (diff.gt(0)) {
-            console.log('Start new trade right away', rec.date.toISOString());
             rec.amount = diff;
             trade = DocHelper.valueProxy(new this._tradesModel({ ...rec, account: this._acc.name, symbol: this._acc.symbol }));
             openOrderCount = 1;
@@ -146,8 +142,7 @@ class FTX {
       const startTime = lastDate.getTime() / 1000;
       const endTime = DateFns.addDays(lastDate, 1).getTime() / 1000;
 
-      console.log('from', new Date(startTime * 1000).toISOString(), 'to', new Date(endTime * 1000).toISOString());
-
+      // Can be used to determine the start of the fill history.
       // const test = await this._api.request({ method: 'GET', path: '/fills', data: {
       //   market: this._account.symbol,
       //   limit: 100,
@@ -187,43 +182,6 @@ class FTX {
         return;
       }
     }
-  }
-
-  async *_yieldBalance(balanceCount) {
-    let start = balanceCount;
-
-    while (true) {
-      await asyncRemoveTokens(1, this._limiter);
-
-      const { data } = await this._api.request({ method: 'GET', path: '/user/walletHistory', data: {
-        symbol: this._account.symbol,
-        count: 100,
-        start
-      } });
-
-      for (const entry of data) {
-        const rec = this._prepBalanceData(entry);
-        if (!rec) continue;
-        yield rec;
-      }
-
-      start += 100;
-  
-      if (data.length < 100) {
-        this._server.log([ 'ftx', 'info' ], `All balance records fetched`);
-        return;
-      }
-    }
-  }
-
-  _prepBalanceData(entry) {
-    if (entry.transactStatus !== 'Completed') return null;
-
-    return {
-      recId: entry.orderId,
-      balance: entry.balance,
-      date: entry.date
-    };
   }
 
   _prepTradeData(order) {

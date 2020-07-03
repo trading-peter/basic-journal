@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element/lit-element.js';
 import D from 'decimal.js';
-import { format, parseISO, differenceInMilliseconds } from 'date-fns';
+import { parseISO, differenceInMilliseconds } from 'date-fns';
 import prettyMS from 'pretty-ms';
 
 class BjTradeTable extends LitElement {
@@ -54,8 +54,9 @@ class BjTradeTable extends LitElement {
           <th>Funding</th>
           <th>Avg. Entry Price</th>
           <th>Avg. Exit Price</th>
-          <th>Slippage open/close</th>
-          <th>Exec. Delay (secs)</th>
+          <th>Candle Close</th>
+          <th>Slippage Open / Close</th>
+          <th>Exec. Delay</th>
         </thead>
         <tbody>
           ${entries.map((item, idx) => this._renderItem(item, idx))}
@@ -69,15 +70,16 @@ class BjTradeTable extends LitElement {
       <tr>
         <td>${this._formatDate(item.date)}</td>
         <td>${item.side}</td>
-        <td title=${item.amount}>${item.amount}</td>
-        <td title=${item.fee}>${item.fee}</td>
-        <td title=${item.rawPnl}>${item.rawPnl}</td>
-        <td title=${item.pnl}>${item.pnl}</td>
-        <td title=${D(item.funding || 0).mul(-1)}>${D(item.funding || 0).mul(-1)}</td>
-        <td>${item.avgPrice}</td>
-        <td>${item.avgPriceClose}</td>
-        <td>${item.openSlippage} / ${item.closeSlippage}</td>
-        <td>${this._executionDelay(item)}</td>
+        <td title=${'Amount: ' + item.amount}>${item.amount}</td>
+        <td title=${'Commission: ' + item.fee}>${item.fee}</td>
+        <td title=${'Raw PnL: ' + item.rawPnl}>${item.rawPnl}</td>
+        <td title=${'PnL: ' + item.pnl}>${item.pnl}</td>
+        <td title=${'Funding: ' + (D(item.funding || 0).mul(-1))}>${D(item.funding || 0).mul(-1)}</td>
+        <td title="Avg. Entry Price">${item.avgPrice}</td>
+        <td title="Avg. Exit Price">${item.avgPriceClose}</td>
+        <td title="Candle Close">${item.candleClosePrice}</td>
+        <td title="Slippage Open / Close">${item.openSlippage} / ${item.closeSlippage}</td>
+        <td title="Exec. Delay">${this._executionDelay(item)}</td>
       </tr>
     `;
   }
@@ -89,7 +91,7 @@ class BjTradeTable extends LitElement {
   }
 
   _formatDate(dateStr) {
-    return format(parseISO(dateStr), 'yyyy-MM-dd HH:mm:ss');
+    return `${dateStr.substr(0, 10)} ${dateStr.substr(11, 8)}`;
   }
 
   _executionDelay(item) {

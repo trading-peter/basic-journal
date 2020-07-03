@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element/lit-element.js';
-import { format, parseISO, differenceInMilliseconds } from 'date-fns';
+import { parseISO, differenceInMilliseconds } from 'date-fns';
 import prettyMS from 'pretty-ms';
 
 class BjBalanceTable extends LitElement {
@@ -70,7 +70,7 @@ class BjBalanceTable extends LitElement {
   }
 
   _formatDate(dateStr) {
-    return format(parseISO(dateStr), 'yyyy-MM-dd HH:mm:ss');
+    return `${dateStr.substr(0, 10)} ${dateStr.substr(11, 8)}`;
   }
 
   _executionDelay(item) {
