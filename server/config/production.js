@@ -7,6 +7,9 @@ module.exports = {
     },
     balanceModel: {
       autoIndex: false
+    },
+    cacheModel: {
+      autoIndex: false
     }
   },
   journal: {
