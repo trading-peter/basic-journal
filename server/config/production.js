@@ -30,12 +30,21 @@ module.exports = {
         apiKey: process.env.ETHPERP_LRAIC_KEY,
         apiSecret: process.env.ETHPERP_LRAIC_SECRET,
         subAccount: process.env.ETHPERP_LRAIC_SUBACCOUNT,
-        balance: 100,
-        cache: true
+        balance: 100
+      },
+      {
+        name: 'LINK_PERP_DRL_3H',
+        exchange: 'FTX',
+        symbol: 'LINK-PERP',
+        startTime: new Date('2019-10-18T00:00:00.000Z'),
+        apiKey: process.env.LINKPERP_DRL_KEY,
+        apiSecret: process.env.LINKPERP_DRL_SECRET,
+        subAccount: process.env.LINKPERP_DRL_SUBACCOUNT,
+        balance: 100
       }
     ]
   },
   appConfig: {
-    accounts: [ 'XBTUSD_LRAIC', 'ETH_PERP_LRAIC' ]
+    accounts: [ 'XBTUSD_LRAIC', 'ETH_PERP_LRAIC', 'LINK_PERP_DRL_3H' ]
   }
 };
