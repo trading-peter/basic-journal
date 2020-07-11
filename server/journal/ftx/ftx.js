@@ -20,6 +20,8 @@ class FTX {
   }
 
   async fetchTradesSince(lastTrade) {
+    // const r = await this._api.request({ method: 'GET', path: '/wallet/deposits'});
+
     let trade = DocHelper.valueProxy(lastTrade);
     let balance = D(trade.balance || this._acc.balance || 0);
     
@@ -47,7 +49,7 @@ class FTX {
         trade.funding = D(trade.funding || 0).add(rec.funding);
         continue;
       }
-      
+
       if (!trade.orderId) {
         trade.set(rec);
         continue;
@@ -86,7 +88,7 @@ class FTX {
           if (!await this._tradesModel.findOne({ orderId: trade.orderId })) {
             await trade.save();
           } else {
-            this._server.log([ 'warning' ], `Trade ${trade.orderId} already saved. Skipping.`);
+            this._server.log([ 'warning', this._account.name ], `Trade ${trade.orderId} already saved. Skipping.`);
           }
 
           const diff = D(trade.amount).sub(tradeClosedValue).abs();
@@ -142,14 +144,15 @@ class FTX {
         this._api.request({ method: 'GET', path: '/fills', data: {
           market: this._account.symbol,
           limit: 100,
-          start_time: startTime,
-          end_time: endTime
+          start_time: Math.floor(startTime),
+          end_time: Math.floor(endTime),
+          order: 'asc'
         }}),
         this._api.request({ method: 'GET', path: '/funding_payments', data: {
           market: this._account.symbol,
           limit: 100,
-          start_time: startTime,
-          end_time: endTime
+          start_time: Math.floor(startTime),
+          end_time: Math.floor(endTime)
         }})
       ]);
 
@@ -165,7 +168,7 @@ class FTX {
       lastDate = DateFns.addDays(lastDate, 1);
 
       if (DateFns.isAfter(lastDate, new Date())) {
-        this._server.log([ 'ftx', 'info' ], `All trades fetched`);
+        this._server.log([ 'ftx', this._account.name ], `All trades fetched`);
         return;
       }
     }

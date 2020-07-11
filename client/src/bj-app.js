@@ -133,13 +133,21 @@ class BjApp extends fetchMixin(LitElement) {
     }
 
     this.balance = balance;
-    
-    this.querySelector('bj-chart').setRecords(balance.map(rec => {
-      return {
-        time: format(parseISO(rec.date), 'yyyy-MM-dd'),
+
+    const values = new Map();
+
+    for (let i = balance.length - 1; i >= 0; --i) {
+      const rec = balance[i];
+      
+      const ts = format(parseISO(rec.date), 'yyyy-MM-dd');
+  
+      values.set(ts, {
+        time: ts,
         value: parseFloat(rec.balance)
-      };
-    }));
+      });
+    }
+
+    this.querySelector('bj-chart').setRecords(Array.from(values.values()));
   }
 
   _selectAccount(e) {

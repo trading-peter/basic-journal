@@ -22,10 +22,10 @@ fancy-canvas@0.2.2:
   resolved "https://registry.yarnpkg.com/fancy-canvas/-/fancy-canvas-0.2.2.tgz#33fd4976724169a1eda5015f515a2a1302d1ec91"
   integrity sha512-50qi8xA0QkHbjmb8h7XQ6k2fvD7y/yMfiUw9YTarJ7rWrq6o5/3CCXPouYk+XSLASvvxtjyiQLRBFt3qkE3oyA==
 
-lightweight-charts@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-3.0.1.tgz#3ffd9d54f7cd313dbed63ede8e5c7018dd99cb43"
-  integrity sha512-+JxXkrlRWePM6Npq9szYTgsu/HTxP23gGMMWUzKqg4fPJQpJ5WglxA2/cqBaFV2M5IF197jnYfduhopyHJqXDQ==
+lightweight-charts@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/lightweight-charts/-/lightweight-charts-3.1.2.tgz#92c29233e0988fbd423a35875c9e43be2465cefa"
+  integrity sha512-U99OxSpkIfT0gUnPFhLvm616WKFnZtyp5q0QtKpQRCXdBTQFg/DhJ23D5XmoWYV4Cux4eub6hlGjZ/BaO3Nb5Q==
   dependencies:
     fancy-canvas "0.2.2"
 
