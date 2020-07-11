@@ -36,10 +36,7 @@ const Journal = new class {
       }
     ]);
 
-    // Cron.schedule('15 * * * *', () => this._fetchAccounts);
-    setTimeout(() => {
-      this._fetchAccounts();
-    }, 2000);
+    Cron.schedule('15 * * * *', () => this._fetchAccounts);
   }
 
   async _fetchAccounts() {
